@@ -1,0 +1,11 @@
+---- get_master_addr_by_name Matches (10 in 6 files) ----
+cpp_redis::client::connect in client.cpp (sources\core) : 		if (m_sentinel.get_master_addr_by_name(name, m_redis_server, m_redis_port, true)) {
+cpp_redis::client::reconnect in client.cpp (sources\core) : 		    !m_sentinel.get_master_addr_by_name(m_master_name, m_redis_server, m_redis_port, true)) {
+cpp_redis::client in client.hpp (includes\cpp_redis\core) :  * add a sentinel definition. Required for connect() or get_master_addr_by_name() when autoconnect is enabled.
+cpp_redis in sentinel.cpp (sources\core) : sentinel::get_master_addr_by_name(const std::string& name, std::string& host, std::size_t& port, bool autoconnect) {
+cpp_redis::sentinel::get_master_addr_by_name in sentinel.cpp (sources\core) :     throw redis_error("No sentinels available. Call add_sentinel() before get_master_addr_by_name()");
+cpp_redis::sentinel in sentinel.hpp (includes\cpp_redis\core) : 			 * add a sentinel definition. Required for connect() or get_master_addr_by_name() when autoconnect is enabled.
+cpp_redis::sentinel in sentinel.hpp (includes\cpp_redis\core) : 			bool get_master_addr_by_name(
+cpp_redis::subscriber::connect in subscriber.cpp (sources\core) :   if (m_sentinel.get_master_addr_by_name(name, m_redis_server, m_redis_port, true)) {
+cpp_redis::subscriber::reconnect in subscriber.cpp (sources\core) :   if (!m_master_name.empty() && !m_sentinel.get_master_addr_by_name(m_master_name, m_redis_server, m_redis_port, true)) {
+cpp_redis::subscriber in subscriber.hpp (includes\cpp_redis\core) :  * add a sentinel definition. Required for connect() or get_master_addr_by_name() when autoconnect is enabled.
