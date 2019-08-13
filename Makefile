@@ -1,7 +1,7 @@
 TARGET=libcpp_redis.a
 TYPE=lib
 TOP_DIR=$(abspath ../../../)
-debug=0
+debug=1
 CPP_REDIS=$(abspath ./)
 PARENT_REDIS=$(abspath ../)
 TACOPIE=$(abspath $(CPP_REDIS)/tacopie/)

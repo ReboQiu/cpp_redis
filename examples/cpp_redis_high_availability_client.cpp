@@ -21,8 +21,7 @@
 // SOFTWARE.
 
 // 编译命令: 
-// g++ -I/home/rebo/td2 -I /home/rebo/td2/common/thirdpart/cpp_redis/includes/ -I /home/rebo/td2/common/thirdpart/cpp_redis/tacopie/includes/  -g -std=c++11 -D_SPD_LOG -c -o cpp_redis_high_availability_client.o cpp_redis_high_availability_client.cpp
-// g++ cpp_redis_high_availability_client.o /home/rebo/td2/common/lib/libcpp_redis.a /home/rebo/td2/common/lib/libutil.a -lpthread -o cpp_redis_high_availability_client
+// g++ -I/home/rebo/td2 -I /home/rebo/td2/common/thirdpart/cpp_redis/includes/ -I /home/rebo/td2/common/thirdpart/cpp_redis/tacopie/includes/  -g -std=c++11 -D_SPD_LOG -c -o cpp_redis_high_availability_client.o cpp_redis_high_availability_client.cpp; g++ cpp_redis_high_availability_client.o /home/rebo/td2/common/lib/libcpp_redis.a /home/rebo/td2/common/lib/libutil.a -lpthread -o cpp_redis_high_availability_client
 #include <cpp_redis/cpp_redis>
 
 #include <iostream>
@@ -65,11 +64,11 @@ main(int argc, char **argv) {
   cpp_redis::client client;
 
   //! Add your sentinels by IP/Host & Port
-  client.add_sentinel("127.0.0.1", 26379);
+  client.add_sentinel("172.20.33.201", 26379);
 
   //! Call connect with optional timeout
   //! Can put a loop around this until is_connected() returns true.
-  client.connect("mymaster", [](const std::string& host, std::size_t port, cpp_redis::connect_state status) {
+  client.connect("redisMaster6379", [](const std::string& host, std::size_t port, cpp_redis::connect_state status) {
     if (status == cpp_redis::connect_state::dropped) {
       std::cout << "client disconnected from " << host << ":" << port << std::endl;
     }
