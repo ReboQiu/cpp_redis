@@ -64,60 +64,71 @@ main(int argc, char **argv) {
   cpp_redis::client client;
 
   //! Add your sentinels by IP/Host & Port
-  client.add_sentinel("172.20.33.201", 26379);
+  client.add_sentinel("10.8.17.42", 26379, 1000);
 
   //! Call connect with optional timeout
   //! Can put a loop around this until is_connected() returns true.
-  client.connect("redisMaster6379", [](const std::string& host, std::size_t port, cpp_redis::connect_state status) {
+  client.connect("mymaster", [](const std::string& host, std::size_t port, cpp_redis::connect_state status) {
     if (status == cpp_redis::connect_state::dropped) {
       std::cout << "client disconnected from " << host << ":" << port << std::endl;
     }
-  },
-    0, -1, 5000);
+  }, 1000, -1, 5000);
+  client.auth("test", [](cpp_redis::reply& reply) {
+    std::cout << "auth:" << reply << std::endl;
+  });
+  std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 
+  LOGTRACE("---------------start: ");
   // same as client.send({ "SET", "hello", "42" }, ...)
-  client.set("hello", "42", [](cpp_redis::reply& reply) {
-    std::cout << "set hello 42: " << reply << std::endl;
+  // client.get("hello", [](cpp_redis::reply& reply) {
+  client.set("hello", "44", [](cpp_redis::reply& reply) {
+          std::cout << "get hello : " << std::endl;
+          LOGTRACE("----------------------end: ");
     // if (reply.is_string())
     //   do_something_with_string(reply.as_string())
   });
+  client.sync_commit();
 
+  int index = 0;
   while (true) {
-    LOGTRACE("-------------------");
-      /*
-    // same as client.send({ "DECRBY", "hello", 12 }, ...)
-    LOGTRACE("-------------------");
-    client.incrby("hello", 12, [](cpp_redis::reply& reply) {
-      LOGTRACE("incrby hello 12: " << reply);
-      // std::cout << "incrby hello 12: " << reply << std::endl;
-      // if (reply.is_integer())
-      //   do_something_with_integer(reply.as_integer())
-    });
+  //   LOGTRACE("-------------------");
+  //     /*
+  //   // same as client.send({ "DECRBY", "hello", 12 }, ...)
+  //   LOGTRACE("-------------------");
+  //   client.incrby("hello", 12, [](cpp_redis::reply& reply) {
+  //     LOGTRACE("incrby hello 12: " << reply);
+  //     // std::cout << "incrby hello 12: " << reply << std::endl;
+  //     // if (reply.is_integer())
+  //     //   do_something_with_integer(reply.as_integer())
+  //   });
 
-    // same as client.send({ "GET", "hello" }, ...)
-    client.get("hello", [](cpp_redis::reply& reply) {
-      LOGTRACE("get hello: " << reply);
-      // std::cout << "get hello: " << reply << std::endl;
-      // if (reply.is_string())
-      //   do_something_with_string(reply.as_string())
-    });
+  //   // same as client.send({ "GET", "hello" }, ...)
+  //   client.get("hello", [](cpp_redis::reply& reply) {
+  //     LOGTRACE("get hello: " << reply);
+  //     // std::cout << "get hello: " << reply << std::endl;
+  //     // if (reply.is_string())
+  //     //   do_something_with_string(reply.as_string())
+  //   });
 
-    // commands are pipelined and only sent when client.commit() is called
-    // client.commit();
+  //   // commands are pipelined and only sent when client.commit() is called
+  //   // client.commit();
 
-    // synchronous commit, no timeout
-    client.sync_commit();
-    std::cout << std::endl;
-    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-    */
+  //   // synchronous commit, no timeout
+  //   client.sync_commit();
+  //   std::cout << std::endl;
+  //   std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+  //   */
 
-      auto incr    = client.incrby("hello", 12);
+      std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+      index++;
+      LOGTRACE("before index: " << index);
+      auto incr    = client.incrby("hello", 1);
       auto get     = client.get("hello");
       client.sync_commit();
       LOGTRACE("incrby get hello: " << incr.get());
       LOGTRACE("get hello: " << get.get());
+      LOGTRACE("index: " << index);
       std::cout << std::endl;
-      std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 
   }
 

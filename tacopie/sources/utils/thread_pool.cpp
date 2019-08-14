@@ -33,7 +33,6 @@ namespace utils {
 
 thread_pool::thread_pool(std::size_t nb_threads) {
   LOG_OUT("create thread_pool");
-  assert(0);
   set_nb_threads(nb_threads);
 }
 
